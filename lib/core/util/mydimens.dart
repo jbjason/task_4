@@ -1,101 +1,79 @@
-// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:task_4/core/network/mynetwork.dart';
 import 'package:task_4/core/util/mycolor.dart';
+import 'package:task_4/core/util/myimage.dart';
 
 class MyDimens {
-  static const cmDivider = Divider(color: MyColor.inActiveColor, thickness: .5);
 
-  AppBar getNormalAppBar(String title, List<Widget> actions, BuildContext ctx,
-          [bool backButton = false]) =>
-      AppBar(
-        leading: backButton
-            ? IconButton(
-                onPressed: () => Navigator.pop(ctx),
-                icon: const Icon(Icons.arrow_back_ios_new),
-              )
-            : const SizedBox(),
-        title: Text(title),
-        centerTitle: true,
-        actions: actions,
-      );
-
-
-  static const bodyGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [Colors.white, Colors.white, Color(0xB3FFFFFF), Color(0x62FFFFFF)],
-  );
-
-  Gradient getHomeGradient(Color color) => LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          color.withOpacity(.9),
-          color.withOpacity(.6),
-          color.withOpacity(.4)
-        ],
-      );
-
-  static const bodyShadow = [
-    BoxShadow(
-      color: Colors.white,
-      blurRadius: 40,
-      offset: Offset(-5, -2),
-    ),
-    BoxShadow(
-      color: Color.fromARGB(255, 173, 196, 219),
-      blurRadius: 10,
-      offset: Offset(5, 5),
-    ),
-  ];
-  final secondaryShadow = [
-    BoxShadow(
-      color: const Color(0xFF3F6080).withOpacity(.8),
-      blurRadius: 10,
-      offset: const Offset(5, 5),
-    ),
-  ];
-
-  Container getButtonStyle({required Widget child}) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: MyColor.skyPrimary,
-          boxShadow: bodyShadow,
-        ),
-        child: child,
-      );
-  Widget getTitleText(String title, Color color) => Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontWeight: FontWeight.bold, color: color),
-      );
-  Widget getSubTitleText(String title, Color color) => Text(
-        title,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
-        style: TextStyle(fontSize: 9.5, color: color),
-      );
-  Widget getDoctorCategory(String title) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 3),
-        decoration: const BoxDecoration(
-          color: MyColor.skyPrimary,
-          borderRadius: BorderRadius.horizontal(
-            left: Radius.zero,
-            right: Radius.circular(4),
+  Widget futureBuilder({
+    required BuildContext context,
+    required Future future,
+    required Widget child,
+  }) {
+    return FutureBuilder(
+      future: future,
+      builder: (context, snapShot) {
+        if (snapShot.connectionState == ConnectionState.waiting) {
+          return getLoadingIndicator();
+        } else if (snapShot.hasError) {
+          return const Center(child: Text('Error Occured while Fetching!'));
+        } else {
+          return child;
+        }
+      },
+    );
+  }
+Widget getDoctorImage({
+    required BuildContext context,
+    String? profilePic,
+    required bool isOnline,
+  }) {
+    final img = profilePic == null
+        ? null
+        : formatProfilePicNetworkPath(profilePic);
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: img == null
+                ? Image.asset(MyImage.placeholderImg, fit: BoxFit.fill)
+                : Image.network(
+                    img,
+                    fit: BoxFit.fill,
+                    errorBuilder: (BuildContext context, Object exception,
+                        StackTrace? stackTrace) {
+                      return Image.asset(MyImage.placeholderImg,
+                          fit: BoxFit.fill);
+                    },
+                  ),
           ),
         ),
-        child: Text(
+        if (isOnline)
+          Positioned(top: 5, left: 5, child:liveDocIndicator()),
+      ],
+    );
+  }
+
+String formatProfilePicNetworkPath(String image) {
+    return (image.replaceFirst("wwwroot", MyNetwork.url))
+        .replaceAll("\\", "//");
+  }
+
+  Row getTitleText(String title) =>  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
           title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 8, color: Colors.white),
+          style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
-      );
+        TextButton(
+          onPressed: () {},
+          child: const Text('See More', style: TextStyle(color: Colors.red,fontSize: 12)),
+        ),
+      ],
+    );
 
-
-  
   Container liveDocIndicator({
     String title = "Online",
     FontWeight fontWeighth = FontWeight.normal,

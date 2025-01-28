@@ -121,12 +121,38 @@ abstract class AppTheme {
             color: AppColors.textFaded,
           ),
         ),
-        scaffoldBackgroundColor: const Color(0xFF1B1E1F),
+        scaffoldBackgroundColor: const Color(0xFF11161F),
         cardColor: AppColors.cardDark,
         iconTheme: const IconThemeData(color: AppColors.iconLight),
-        colorScheme: ThemeData()
-            .colorScheme
-            .copyWith(secondary: AppColors.accent)
-            .copyWith(surface: const Color(0xFF1B1E1F)),
+        inputDecorationTheme: const InputDecorationTheme(
+          labelStyle: TextStyle(fontSize: 12, color: MyColor.textThird),
+          hintStyle: TextStyle(
+              fontSize: 15, color: MyColor.textThird, letterSpacing: 1.2),
+          prefixStyle: TextStyle(
+            fontSize: 14,
+            color: MyColor.textColor,
+            fontWeight: FontWeight.bold,
+          ),
+          filled: true,
+          prefixIconColor: MyColor.textThird,
+          fillColor: Color(0xFF11161F),
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: Colors.white, width: 0.3),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: Colors.white, width: 0.3),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: Colors.red),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide(color: Colors.red),
+          ),
+        ),
       );
 }
