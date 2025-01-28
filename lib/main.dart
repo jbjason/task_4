@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:task_4/config/theme/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:task_4/core/util/mystring.dart';
 import 'package:task_4/features/home/presentation/screens/home_screen.dart';
 import 'package:task_4/features/home/providers/home_provider.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox(MyString.boxName);
   runApp(const MyApp());
 }
 

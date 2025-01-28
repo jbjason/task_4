@@ -1,4 +1,5 @@
 class MyString {
+  static const boxName = 'doctor-info';
   // fonts
   static const rubikRegular = 'Rubik_Regular';
   static const rubikMedium = 'Rubik_Medium';
@@ -11,8 +12,7 @@ class MyString {
   static const poppinsBlack = 'Poppins_Black';
 
   static const errorMsg = "Opps! something went wrong";
-
-  static const boxName = 'login-info';
+  
   static const genders = ['Male', "Female", "Others"];
   static const appointmentListType = ["Confirmed", "Completed"];
   static const appointmentStatus = [
